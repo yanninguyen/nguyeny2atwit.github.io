@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Work Time Calculator</title>
+        <style>
+            .nameBox 
+                {
+                    display: flex;
+                    align-items: center;
+                }
+            .locationContainer
+                {
+                    display: flex;
+                    align-items: center;
+                }
+            .location 
+                {
+                    width: 100%;
+                    align-items: center;
+                    max-width: 600px;
+                    border: 2px solid #ccc;
+                    padding: 10px;
+                    margin: auto;
+                    border-radius: 5px;
+                    background-color: #f9f9f9;
+                    font-family: 'Times New Roman', Times, serif;
+                    display: flex;
+                    flex-direction: column;
+                }
+            
+        </style>                
+    </head>
+    <body>
+        <h2>Work Time Calculator</h2>
+        <div style="text-align:center">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" placeholder="Enter email address">
+        </div>
+        <div style="text-align:center">
+            <label for="reportDate">Date of Report:</label>
+            <input type="date" id="reportDate" value="">
+        </div>
+        <div style="text-align:center">
+            <label for="reportType">Type of Report:</label>
+            <select id="reportType">
+                <option value="Supervisor">Supervisor</option>
+                <option value="Correction">Correction</option>
+                <option value="Test">Test</option>
+            </select>
+        </div>
+
+        <div id="locationContainer" style="text-align:center">        
+        <button onclick="box()" id="makeLocationButton" style="margin-bottom: 10px;" style="text-align:center">Add location</button>
+        <script>
+            //Putting JS here because the Add Location button needs to be moved down each time
+            //a new location is added
+
+            //Div elements will be made via function instead of putting it in HTML
+            //Makes things easier to format
+
+            let boxCount = 0;
+            let employeeBoxCounter = 0;
+            boxCount++;
+
+            //This makes a box for a location
+            //Boxes got unique IDs
+            function box()
+                {                                        
+                    const locationBox = document.createElement('div');
+                    const locationID = 'location-${boxCount++}';
+                    locationBox.className = 'location';
+                    locationBox.id = locationID;
+                    const label = document.createElement('h3');
+                    label.className = 'label';
+                    label.textContent = 'Billable Client ' + boxCount;
+                    locationBox.appendChild(label);
+                    boxCount++;
+
+                    //Within locationBox, have location name box(es) "nameBox", add to locationBox
+                    //This is the title which is name "Billable Client:", each number is ordered accordingly
+                    //boxCount might not be needed, will update
+                    const nameBox = document.createElement('div');
+                    nameBox.className = 'nameBox';
+                    const nameLabel = document.createElement('p');                    
+                    nameLabel.textContent = 'Billable Client:';                    
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'text';
+                    nameInput.placeholder = 'Enter client name';
+                    nameInput.value = '';
+                    nameBox.appendChild(nameLabel);
+                    nameBox.appendChild(nameInput);
+                    locationBox.appendChild(nameBox);                                        
+                    const addEmployeeBox = document.createElement('button');
+                    addEmployeeBox.textContent = 'Add employee';                   
+                    addEmployeeBox.onclick = function()
+                        {
+                            //Moves the remove location button to the bottom each time 
+                            //a new employee is added
+                            employeet(locationBox);
+                            if (removeLocationBox)
+                                {
+                                    locationBox.appendChild(removeLocationBox);
+                                }
+                        }
+
+                    locationBox.appendChild(addEmployeeBox); 
+                    
+                
+                    const removeLocationBox = document.createElement('button');
+                    removeLocationBox.textContent = 'Remove Location';
+                    removeLocationBox.style.marginTop = '20px';                                                        
+                    removeLocationBox.onclick = function() 
+                        {
+                            //boxCounter isn't used here. Subtracting boxCounter then using it in the 
+                            //title will make reordering hard.
+                            locationBox.remove();
+                            boxCount--;                                                       
+                            const labelUpdate = document.querySelectorAll('.label');                            
+                            for (let i = 0; i < labelUpdate.length; i++)
+                                {                                    
+                                    labelUpdate[i].textContent = 'Billable Client ' + (i + 1);
+                                }
+                                console.log("Removed location")
+                        }
+                   
+                    employeet(locationBox);                    
+                    locationBox.appendChild(removeLocationBox);                    
+                    document.getElementById('locationContainer').appendChild(locationBox);
+                    locationContainer.appendChild(locationBox);
+                    locationContainer.appendChild(makeLocationButton);
+                    console.log("Made location")
+
+                }            
+            //Function will need an already made location, this makes an employee
+            //Employee is a child of a location box
+            function employeet (location)
+                {
+                    //Within locationBox, employeeContainer
+                    const employeeContainer = document.createElement('div');
+                    employeeContainer.className = 'employeeContainer';
+                    const employeeID = 'employeeContainer-${employeeBoxCounter++}';
+                    employeeContainer.id = employeeID;
+                    const employeeNameInput = document.createElement('input');
+                    employeeNameInput.type = 'text';
+                    employeeNameInput.placeholder = 'Enter employee name';                    
+                    employeeNameInput.value = '';                    
+                    //You can test: replace to timeInput1.className = 'tInput1' or 'tInput2'
+                    
+                    //Start time                    
+                    var timeInput1 = document.createElement('input');
+                    timeInput1.type = 'time';
+                    timeInput1.classList.add('tInput');
+                    timeInput1.value = '';
+                    //End time
+                    var timeInput2 = document.createElement('input');
+                    timeInput2.type = 'time';
+                    timeInput2.classList.add('tInput');
+                    timeInput2.value = '';
+
+                    //Delete an employee
+                    //Can be made into another function --DONE
+
+               
+                    const removeEmployeeBox = document.createElement('button');
+                    removeEmployeeBox.textContent = 'Remove employee';
+                    removeEmployeeBox.onclick = function()
+                        {
+                            dead(location);
+                        }
+
+                    employeeContainer.appendChild(employeeNameInput);
+                    employeeContainer.appendChild(document.createTextNode(" : "));                    
+                    employeeContainer.appendChild(timeInput1);
+                    employeeContainer.appendChild(document.createTextNode(" - "));
+                    employeeContainer.appendChild(timeInput2);
+                    employeeContainer.appendChild(removeEmployeeBox);
+                    
+
+                    location.appendChild(employeeContainer);
+                    console.log("Made employee")
+                }
+            
+            //Deleting employee
+            function dead(boxForLocation)
+                {
+                    const employeeIDBox = boxForLocation.getElementsByClassName('employeeContainer');
+                    if (employeeIDBox.length > 0) 
+                        {
+                            const last = employeeIDBox[employeeIDBox.length - 1];
+                            last.remove();
+                            console.log("Removed employee")
+                        }
+                }
+            //Do math then show math
+                        
+            function calculate() 
+                {                
+                    var totalCommuteTime = parseFloat(document.getElementById('totalCommuteTime').value) || 0;
+                    var totalLunchTime = parseFloat(document.getElementById('totalLunchTime').value) || 0;
+                    var totalCommuteTimeHours = totalCommuteTime / 60; 
+                    var totalLunchTimeHours = totalLunchTime / 60; 
+
+                    var locationContainers = document.querySelectorAll('.location');
+                    var totalWorkTimePerLocation = [];
+                    var totalWorkTime = 0;
+                    var totalEmployees = 0;
+
+
+
+                    //If they got employees in the box, it will check the values
+                    for (var i = 0; i< locationContainers.length; i++) 
+                        {
+                            var locationList = locationContainers[i];
+                            var locationTimes = locationList.querySelectorAll('.tInput');
+
+                            var employeeWorkHours = 0;
+                            var employeesHTML = "<ul>";
+
+                            //Calculate
+                            for (var j = 0; j < locationTimes.length; j += 2) 
+                                {
+                                    var employeeName = locationTimes[j].previousElementSibling.value;
+                                    var startTime = locationTimes[j].value;
+                                    var endTime = locationTimes[j + 1].value;
+                                    
+                                    var startTimeParts = startTime.split(':');
+                                    var endTimeParts = endTime.split(':');                                    
+                                    var employeeInTime = new Date(2000, 0, 1, parseInt(startTimeParts[0]), parseInt(startTimeParts[1]));
+                                    var employeeOutTime = new Date(2000, 0, 1, parseInt(endTimeParts[0]), parseInt(endTimeParts[1]));
+                                    //Math                                    
+                                    var employeeWorkTime = (employeeOutTime - employeeInTime) / (1000 * 60 * 60);
+                                    employeeWorkHours += employeeWorkTime;
+                                    totalEmployees++;
+
+                                    employeesHTML += "<li>" + employeeName + ": " + employeeWorkTime.toFixed(2) + " hours (Start: " + startTime + ", Finish: " + endTime + ")</li>";
+                                }
+                            employeesHTML += "</ul>";
+                            
+
+                            var locationWorkTime = employeeWorkHours;
+                            totalWorkTime += locationWorkTime;
+
+                            totalWorkTimePerLocation.push({ workHours: locationWorkTime, employeesHTML: employeesHTML }); 
+                        };
+
+                    
+                    var totalWorkTimeHTML = "<ul>";                    
+                    for (var e = 0; e < totalWorkTimePerLocation.length; e++) 
+                        {
+                            var locationData = totalWorkTimePerLocation[e];
+                            var locationName = document.querySelector('.location h3.label').textContent.trim(); 
+                            var locationWorkTime = locationData.workHours;
+                            var locationCommuteTime = (totalCommuteTimeHours / totalWorkTime) * locationWorkTime;
+                            var locationLunchTime = (totalLunchTimeHours / totalWorkTime) * locationWorkTime;
+                            var totalLocationTime = locationWorkTime + locationCommuteTime + locationLunchTime;
+                            totalWorkTimeHTML += "<li>" + locationName + ": " + totalLocationTime.toFixed(2) + " hours";
+                            totalWorkTimeHTML += locationData.employeesHTML;
+                            totalWorkTimeHTML += "</li>";
+                        }; 
+
+                    totalWorkTimeHTML += "</ul>";
+                    //Display time
+                    totalWorkTimeHTML += "<h3>Total Commute Time:</h3>";
+                    totalWorkTimeHTML += "<p>Total Commute Time: " + totalCommuteTimeHours.toFixed(2) + " hours</p>";
+                    totalWorkTimeHTML += "<p>Total Lunch Time: " + totalLunchTimeHours.toFixed(2) + " hours</p>";
+
+                    
+                    document.getElementById('totalWorkTime').innerHTML = totalWorkTimeHTML;
+
+                    return totalWorkTimeHTML;
+                }
+
+            function submit() 
+                {
+                    var email = document.getElementById('email').value;
+                    var reportDate = document.getElementById('reportDate').value;
+                    var reportType = document.getElementById('reportType').value; 
+                    var message = document.getElementById('message').value.replace(/\n/g, "<br>");
+                    var calculations = calculate(); 
+                    //Error checking                
+                    if (!email || !reportDate) 
+                        {
+                            alert('ERROR: Please fill in all required fields.');
+                            return;
+                        }
+                    //This will look bad on the email. Will reformat it into a better looking message in next updates. 
+                    var messageObject = 
+                        {
+                            "email": email,
+                            "reportDate": reportDate,
+                            "reportType": reportType, 
+                            "message": "<br><br><b>" + message + "</b><br><br>", 
+                            "calculations": calculations
+                        };
+
+                    //Send post request
+                    fetch
+                        (
+                            //CHANGE LINK HERE
+                            'https://prod-05.westus.logic.azure.com:443/workflows/54305285eda74b2d9279c7d148f09c22/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ew7tXoFggVU2pvXNxvElJ3LdTqlt70iLYsufZWWHHco', 
+                            {
+                                method: 'POST',   
+                                body: JSON.stringify(messageObject),
+                                headers: 
+                                    {
+                                    'Content-Type': 'application/json'
+                                    }
+                            }
+                        )
+
+                    //Error checking for Power Automate (make sure the flow is turned on)
+                    .then(function(response) 
+                        {
+                            if (response.ok) 
+                                {
+                                    alert('Message submitted successfully!');
+                                    reset(); 
+                                } 
+                            else 
+                                {
+                                    alert('Error submitting message. Please try again later.');
+                                }
+                        })  
+                    
+                    .catch(function(error) 
+                        {
+                            console.error('Error:', error);
+                            alert('Error submitting message. Please try again later.');
+                        });
+                }
+
+            //Resets everything
+            //Might not need this in the future
+            function reset() 
+                {                    
+                    document.getElementById('locationContainer').innerHTML = '';
+                    box(); 
+                    document.getElementById('totalCommuteTime').value = ''; 
+                    document.getElementById('totalLunchTime').value = ''; 
+                    document.getElementById('totalWorkTime').innerHTML = ''; 
+                    document.getElementById('message').value = ''; 
+                }
+                    
+                 
+            //Move the add location button to the bottom
+            const makeLocationButton = document.createElement('button');
+            makeLocationButton.textContent = 'Add location';            
+            makeLocationButton.onclick = box; 
+            box();        
+            locationContainer.appendChild(makeLocationButton);
+            makeLocationButton.style.marginTop = '20px';
+            makeLocationButton.style.marginBottom = '20px';
+                                    
+        </script>
+        </div>
+        <div style="text-align:center">
+            <label for="totalCommuteTime">Total Commute Time (minutes):</label>
+            <input type="number" id="totalCommuteTime" placeholder="Total commute time" value="0"> 
+        </div>
+
+        <div style="text-align:center">
+            <label for="totalLunchTime">Total Lunch Time (minutes):</label>
+            <input type="number" id="totalLunchTime" placeholder="Total lunch time" value="0"> 
+        </div>
+
+        <div>
+            <button onclick="calculate()">Calculate Total</button>
+        </div>
+        
+        <br><br>
+        <div>
+            <h3>Total Work Time per Location:</h3>
+            <div id="totalWorkTime"></div>
+        </div>
+        <br>
+        <div style="text-align:center">
+            <h3>Message to Office:</h3>
+            <textarea id="message" rows="8" cols="50"></textarea> 
+        </div>
+        <button onclick="submit()" style="text-align:center">Submit</button>
+        </body>
+        </html>
